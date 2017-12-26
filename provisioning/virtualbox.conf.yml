@@ -1,6 +1,6 @@
 ---
 #box: "boxcutter/ubuntu1604-desktop"
-box: "boxcutter/ubuntu1404-desktop"
+box: "box-cutter/ubuntu1404-desktop"
 contrail_devstack_vm:
   host_name: contrail_devstack_vm
   memory: 6144
