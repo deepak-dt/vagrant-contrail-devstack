@@ -5,7 +5,7 @@ export GIT_EMAIL=$1
 export GIT_USERNAME=$2
 export GIT_PASSWORD=$3
 export DEVSTACK_BRANCH="stable/newton"
-export phy_intf="enp0s4"
+export phy_intf="eth1"
 
 
 line_to_search_1="change_stage \"python-dependencies\" \"repo-init\""
