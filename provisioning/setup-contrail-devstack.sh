@@ -106,6 +106,8 @@ sed -i "/PHYSICAL_INTERFACE.*/s/.*/PHYSICAL_INTERFACE=$phy_intf/" localrc
 #sed -i "/$line_to_search_1/a$line_to_add_1" $WORKSPACE/contrail-installer/contrail.sh
 
 if [ $dpdk_enabled = true ]; then
+    sudo apt-get install -y liburcu-dev
+    
     if [ $(grep "\--dpdk-enabled True" $WORKSPACE/contrail-installer/contrail.sh | wc -l) = 0 ]; then
         sed -i 's/provision_vrouter.py/provision_vrouter.py --dpdk-enabled/g' $WORKSPACE/contrail-installer/contrail.sh
     fi
