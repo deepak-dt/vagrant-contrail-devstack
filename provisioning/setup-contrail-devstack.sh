@@ -81,7 +81,7 @@ echo "*************************************************"
 sudo apt-get update 
 sudo apt-get -y install git vim-gtk libxml2-dev libxslt1-dev libpq-dev python-pip libsqlite3-dev 
 sudo apt-get -y build-dep python-mysqldb 
-sudo apt-get -y install liburcu-dev libev4 libev-dev build-essential python-dev
+sudo apt-get -y install liburcu-dev libev4 libev-dev build-essential python-dev libsasl2-dev
 sudo pip install git-review tox 
 
 git config --global user.email $GIT_EMAIL
