@@ -8,6 +8,7 @@ export DEVSTACK_BRANCH="stable/newton"
 export phy_intf="eth1"
 export contrail_branch="master"
 #export contrail_branch="R3.2"
+export contrail_dpdk_branch="contrail_dpdk_2_1"
 dpdk_enabled=true
 #export http_proxy=$4
 #export https_proxy=$5
@@ -16,7 +17,7 @@ line_to_search_1="change_stage \"python-dependencies\" \"repo-init\""
 line_to_add_1="cp $WORKSPACE/manifest.xml \$CONTRAIL_SRC/.repo/manifest.xml"
 
 line_to_search_2="change_stage \"repo-sync\" \"fetch-packages\""
-line_to_add_2="git clone https://github.com/Juniper/contrail-dpdk -b contrail_dpdk_2_1 \$CONTRAIL_SRC/third_party/dpdk; sed -i 's/snb/native/g' \$CONTRAIL_SRC/third_party/dpdk/config/defconfig_x86_64-native-linuxapp-gcc; grep -rl 'rcu_barrier' \$CONTRAIL_SRC/vrouter/ | xargs sed -i 's/rcu_barrier();/\\\/*rcu_barrier();*\\\/ \\\/* Deepak *\\\//g';"
+line_to_add_2="git clone https://github.com/Juniper/contrail-dpdk -b $contrail_dpdk_branch \$CONTRAIL_SRC/third_party/dpdk; sed -i 's/snb/native/g' \$CONTRAIL_SRC/third_party/dpdk/config/defconfig_x86_64-native-linuxapp-gcc; grep -rl 'rcu_barrier' \$CONTRAIL_SRC/vrouter/ | xargs sed -i 's/rcu_barrier();/\\\/*rcu_barrier();*\\\/ \\\/* Deepak *\\\//g';"
 
 line_to_search_3="function stop_contrail()"
 line_to_add_3="#Deepak\n    ps -ef | grep 'contrail-vrouter-dpdk' | grep -v grep | awk '{print \$2}' | xargs sudo kill"
