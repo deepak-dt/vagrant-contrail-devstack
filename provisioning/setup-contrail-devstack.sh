@@ -119,10 +119,10 @@ if [ $dpdk_enabled = true ]; then
     # Copy code to start and configure "DPDK based vRouter"
     # in contrail.sh
     ########################################################
-    temp_str=`grep -n "Above content shall be copied as it is to contrail.sh" $WORKSPACE/restart_vrouter_dpdk.sh | awk '{print $1}'`
+    temp_str=`grep -n "Above content shall be copied as it is to contrail.sh" $WORKSPACE/stuff_to_copy/restart_vrouter_dpdk.sh | awk '{print $1}'`
     lines_to_copy=${temp_str%%:#*}
     ((lines_to_copy=$lines_to_copy-1))
-    cp $WORKSPACE/restart_vrouter_dpdk.sh $WORKSPACE/contrail-installer/
+    cp $WORKSPACE/stuff_to_copy/restart_vrouter_dpdk.sh $WORKSPACE/contrail-installer/
     sed -i 1r<(head -$lines_to_copy $WORKSPACE/contrail-installer/restart_vrouter_dpdk.sh) $WORKSPACE/contrail-installer/contrail.sh
 
     sed -n "1h;2,\$H;\${g;s/$line_to_rep_orig_4/$line_to_rep_new_4/;p}" $WORKSPACE/contrail-installer/contrail.sh > $WORKSPACE/contrail-installer/contrail_1.sh
