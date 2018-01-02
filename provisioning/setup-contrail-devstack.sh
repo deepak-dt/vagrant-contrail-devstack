@@ -6,7 +6,10 @@ export GIT_USERNAME=$2
 export GIT_PASSWORD=$3
 export DEVSTACK_BRANCH="stable/newton"
 export phy_intf="eth1"
-
+export contrail_branch="R3.2"
+dpdk_enabled=true
+#export http_proxy=$4
+#export https_proxy=$5
 
 line_to_search_1="change_stage \"python-dependencies\" \"repo-init\""
 line_to_add_1="cp $WORKSPACE/manifest.xml \$CONTRAIL_SRC/.repo/manifest.xml"
@@ -29,7 +32,6 @@ line_to_rep_new_6="fi\n\n    # Deepak\n    if [ \$dpdk_enabled = true ] ; then\n
 line_to_rep_orig_7="apt_get install chkconfig"
 line_to_rep_new_7="apt_get install sysv-rc-conf"
 
-dpdk_enabled=false
 #while true; do
 #    read -p "Do you wish to install DPDK based vrouter?" yn
 #    case $yn in
@@ -77,6 +79,7 @@ echo "*************************************************"
 sudo apt-get update 
 sudo apt-get -y install git vim-gtk libxml2-dev libxslt1-dev libpq-dev python-pip libsqlite3-dev 
 sudo apt-get -y build-dep python-mysqldb 
+sudo apt-get -y install liburcu-dev libev4 libev-dev build-essential python-dev
 sudo pip install git-review tox 
 
 git config --global user.email $GIT_EMAIL
@@ -93,8 +96,6 @@ echo "Contrail-installer : Checkout contrail-installer and devstack repositories
 echo "******************************************************************************"
 
 git clone https://github.com/juniper/contrail-installer.git
-git clone https://github.com/openstack-dev/devstack -b $DEVSTACK_BRANCH
-sudo chown -R vagrant:vagrant $WORKSPACE/devstack
 
 cd $WORKSPACE/contrail-installer
 
@@ -103,11 +104,10 @@ cd $WORKSPACE/contrail-installer
 cp samples/localrc-all localrc
 
 sed -i "/PHYSICAL_INTERFACE.*/s/.*/PHYSICAL_INTERFACE=$phy_intf/" localrc
+sed -i "/# CONTRAIL_BRANCH.*/s/.*/CONTRAIL_BRANCH=$contrail_branch/" localrc
 #sed -i "/$line_to_search_1/a$line_to_add_1" $WORKSPACE/contrail-installer/contrail.sh
 
 if [ $dpdk_enabled = true ]; then
-    sudo apt-get install -y liburcu-dev
-    
     if [ $(grep "\--dpdk-enabled True" $WORKSPACE/contrail-installer/contrail.sh | wc -l) = 0 ]; then
         sed -i 's/provision_vrouter.py/provision_vrouter.py --dpdk-enabled/g' $WORKSPACE/contrail-installer/contrail.sh
     fi
@@ -140,8 +140,8 @@ if [ $(grep "dpdk_enabled=" $WORKSPACE/contrail-installer/localrc | wc -l) = 0 ]
 fi
 
 # Workaround - package not available in Ubuntu
-sed -n "1h;2,\$H;\${g;s/$line_to_rep_orig_7/$line_to_rep_new_7/;p}" $WORKSPACE/contrail-installer/contrail.sh > $WORKSPACE/contrail-installer/contrail_1.sh
-mv $WORKSPACE/contrail-installer/contrail_1.sh $WORKSPACE/contrail-installer/contrail.sh
+#sed -n "1h;2,\$H;\${g;s/$line_to_rep_orig_7/$line_to_rep_new_7/;p}" $WORKSPACE/contrail-installer/contrail.sh > $WORKSPACE/contrail-installer/contrail_1.sh
+#mv $WORKSPACE/contrail-installer/contrail_1.sh $WORKSPACE/contrail-installer/contrail.sh
 
 # TODO:remove following packages - libipfix-dev, python-docker-py, python-sseclient
 
@@ -159,6 +159,8 @@ sleep 10
 ########################################################
 # proceed for devstack setup
 ########################################################
+git clone https://github.com/openstack-dev/devstack -b $DEVSTACK_BRANCH
+sudo chown -R vagrant:vagrant $WORKSPACE/devstack
 cd $WORKSPACE/devstack
 
 cp $WORKSPACE/contrail-installer/devstack/lib/neutron_plugins/opencontrail $WORKSPACE/devstack/lib/neutron_plugins/

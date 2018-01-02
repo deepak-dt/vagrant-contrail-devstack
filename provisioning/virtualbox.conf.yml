@@ -1,6 +1,8 @@
 ---
 #box: "boxcutter/ubuntu1604-desktop"
 box: "box-cutter/ubuntu1404-desktop"
+http_proxy: "***REMOVED***"
+https_proxy: "***REMOVED***"
 contrail_devstack_vm:
   host_name: contrail_devstack_vm
   memory: 6144
