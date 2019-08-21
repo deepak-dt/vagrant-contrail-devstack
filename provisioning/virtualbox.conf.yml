@@ -1,13 +1,13 @@
 ---
 #box: "boxcutter/ubuntu1604-desktop"
 box: "box-cutter/ubuntu1404-desktop"
-http_proxy: "***REMOVED***"
-https_proxy: "***REMOVED***"
+http_proxy: ""
+https_proxy: ""
 contrail_devstack_vm:
   host_name: contrail_devstack_vm
   memory: 6144
   cpus: 2
   git_email: deepak.dt@gmail.com
   git_username: "deepak-dt"
-  git_password: "***REMOVED***"
+  git_password: ""
   provider_ip: "203.0.113.9"
